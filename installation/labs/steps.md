@@ -37,7 +37,7 @@ sudo yum update -y --security
 
 Install useful stuff:
 ```
-sudo yum install -y wget git
+sudo yum install -y wget git nmap-ncat
 ```
 
 Enable EPEL repository:
