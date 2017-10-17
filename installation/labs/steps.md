@@ -208,3 +208,159 @@ sudo systemctl enable ntpd
 ```
 
 Check it is running; command: `sudo systemctl status ntpd`
+
+## Install MariaDB server on master & worker 1
+
+Install MariaDB 5.5 on master and worker1:
+```
+sudo yum install -y mariadb-server
+```
+
+Backup old config & create new one:
+```
+sudo mv /etc/my.cnf /etc/my.conf.old
+sudo vi /etc/my.cnf
+```
+
+Paste the following in it:
+```
+[mysqld]
+transaction-isolation = READ-COMMITTED
+# Disabling symbolic-links is recommended to prevent assorted security risks;
+# to do so, uncomment this line:
+# symbolic-links = 0
+
+key_buffer = 16M
+key_buffer_size = 32M
+max_allowed_packet = 32M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+
+max_connections = 550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+
+#log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
+#and chown the specified folder to the mysql user.
+log_bin=/var/lib/mysql/mysql_binary_log
+
+binlog_format = mixed
+
+read_buffer_size = 2M
+read_rnd_buffer_size = 16M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+```
+
+Start & enable:
+```
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+```
+
+Secure the server:
+```
+sudo /usr/bin/mysql_secure_installation
+```
+
+Answer the questions as follows:
+- Set password protection for the server
+- Revoke permissions for anonymous users
+- Permit remote privileged login
+- Remove test databases
+- Refresh privileges in memory
+
+## Enable replication for servers
+
+### On the master
+
+Modify config to add this: 
+```
+[mariadb]
+server_id=1
+log-basename=master1
+```
+
+Restart the server: `sudo systemctl restart mariadb`;
+
+Launch a prompt: `mysql -u root -p`
+
+Execute this to grant replication privileges to slave:
+```
+GRANT REPLICATION SLAVE ON *.* TO replication_user IDENTIFIED BY 'replication_user_password';
+```
+
+Get the log coordinates; execute this:
+```
+FLUSH TABLES WITH READ LOCK;
+```
+
+Then, **in another prompt**, execute this:
+```
+SHOW MASTER STATUS;
+```
+
+Note the coordinates.
+
+Unlock the tables in the first prompt by executing:
+```
+UNLOCK TABLES;
+```
+
+Close the prompts.
+
+### On the slave
+
+Modify config to add this: 
+```
+[mariadb]
+server_id=2
+```
+
+Restart the server: `sudo systemctl restart mariadb`
+
+Launch a prompt: `mysql -u root -p`
+
+Execute this to configure a connection to the master:
+```
+CHANGE MASTER TO MASTER_HOST='master host', MASTER_USER='replication_user', MASTER_PASSWORD='replication_user_password', MASTER_LOG_FILE='master file name', MASTER_LOG_POS=master file offset;
+```
+
+Then execute this to initiate slave operations on the replica:
+```
+START SLAVE;
+SHOW SLAVE STATUS \G
+```
+
+If successful, the `Slave_IO_State` field will read "Waiting for master to send event".
+
+## Install MariaDB & JDBC connector on all nodes
+
+Install MariaDB libs:
+```
+sudo yum install -y mariadb
+```
+
+Download & install MySQL JDBC connector:
+```
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.tar.gz
+tar -xzvf mysql-connector-java-5.1.44.tar.gz
+sudo mkdir -p /usr/share/java/
+sudo cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/java/
+```
