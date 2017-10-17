@@ -364,3 +364,105 @@ tar -xzvf mysql-connector-java-5.1.44.tar.gz
 sudo mkdir -p /usr/share/java/
 sudo cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/java/mysql-connector-java.jar
 ```
+
+## Install Cloudera Manager and CDH, path B
+
+### Add Cloudera repositories
+
+Find the correct repository file from https://www.cloudera.com/documentation/enterprise/release-notes/topics/cm_vd.html
+
+Install repo file; for CM/CDH 5.8.3:
+```
+wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo
+```
+
+Edit it:
+```
+vi cloudera-manager.repo
+```
+
+And change baseurl to point to the correct version.
+
+Copy it in the yum repos directory:
+```
+sudo cp cloudera-manager.repo /etc/yum.repos.d/
+```
+
+### Install Java on CM host
+
+Either use the Oracle-provided rpm package or install the one provided in the Cloudera repos.
+
+Install Java 7 from Cloudera repos:
+```
+sudo yum install -y oracle-j2sdk1.7
+```
+
+### Install CM
+
+Install CM using yum:
+```
+sudo yum install -y cloudera-manager-daemons cloudera-manager-server
+```
+
+Do not start the wizard until you completed the next two sections.
+
+### Create databases
+
+Create database for CM:
+```
+sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql -uroot -proot_password scm scm scm_password
+```
+
+Create databases for services. For MySQL/MariaDB, use these statements:
+```
+CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON hue.* TO 'hue'@'%' IDENTIFIED BY 'hue_password';
+
+CREATE DATABASE oozie DEFAULT CHARACTER SET utf8;
+GRANT ALL ON oozie.* TO 'oozie'@'%' IDENTIFIED BY 'oozie_password';
+
+CREATE DATABASE sqoop DEFAULT CHARACTER SET utf8;
+GRANT ALL ON sqoop.* TO 'sqoop'@'%' IDENTIFIED BY 'sqoop_password';
+
+CREATE DATABASE amon DEFAULT CHARACTER SET utf8;
+GRANT ALL ON amon.* TO 'amon'@'%' IDENTIFIED BY 'amon_password';
+
+CREATE DATABASE rman DEFAULT CHARACTER SET utf8;
+GRANT ALL ON rman.* TO 'rman'@'%' IDENTIFIED BY 'rman_password';
+
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8;
+GRANT ALL ON metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive_password';
+
+CREATE DATABASE sentry DEFAULT CHARACTER SET utf8;
+GRANT ALL ON senty.* TO 'sentry'@'%' IDENTIFIED BY 'sentry_password';
+
+CREATE DATABASE nav DEFAULT CHARACTER SET utf8;
+GRANT ALL ON nav.* TO 'nav'@'%' IDENTIFIED BY 'nav_password';
+
+CREATE DATABASE navms DEFAULT CHARACTER SET utf8;
+GRANT ALL ON navms.* TO 'navms'@'%' IDENTIFIED BY 'navms_password';
+```
+
+### Start CMS
+
+Command:
+```
+sudo systemctl start cloudera-scm-server
+```
+
+### Install hosts using wizard
+
+Follow these guidelines:
+- access the CM Web UI and start the wizard
+- choose to install the Data Hub Edition
+- add the hosts
+- choose to install CDH using parcels
+- edit the parcel repositories to install CDH 5.8.3 and not 5.8.5
+- choose to install the JDK
+- choose to not use Single User Mode
+- specify the credentials to access the hosts
+- deploy the Core Hadoop of CDH services
+- deploy three ZooKeeper instances
+- configure databases according to the section on creating databases
+- configure settings
+- GO!
