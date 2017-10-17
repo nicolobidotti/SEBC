@@ -6,10 +6,10 @@ Spawns 5 m3.xlarge instances using "sebc" key and security group
 
 Uses CentOS rolling 1602 (7.2-based)
 
-Uses bigger root volume (16GiB instead of 8GiB) and attaches instance store volumes (2x40GiB SSDs)
+Uses bigger root volume (32GiB instead of 8GiB) and attaches instance store volumes (2x40GiB SSDs)
 
 ```
-aws --profile personal ec2 run-instances --image-id ami-9bf712f4 --security-groups sebc --key-name sebc --instance-type m3.xlarge --count 5 --block-device-mappings "[{\"DeviceName\":\"/dev/sda1\",\"Ebs\":{\"VolumeSize\":16}},{\"DeviceName\":\"/dev/sdb\",\"VirtualName\":\"ephemeral0\"},{\"DeviceName\":\"/dev/sdc\",\"VirtualName\":\"ephemeral1\"}]"
+aws --profile personal ec2 run-instances --image-id ami-9bf712f4 --security-groups sebc --key-name sebc --instance-type m3.xlarge --count 5 --block-device-mappings "[{\"DeviceName\":\"/dev/sda1\",\"Ebs\":{\"VolumeSize\":32}},{\"DeviceName\":\"/dev/sdb\",\"VirtualName\":\"ephemeral0\"},{\"DeviceName\":\"/dev/sdc\",\"VirtualName\":\"ephemeral1\"}]"
 ```
 
 ## Shell on all hosts
