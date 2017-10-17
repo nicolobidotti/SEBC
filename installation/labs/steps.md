@@ -466,3 +466,35 @@ Follow these guidelines:
 - configure databases according to the section on creating databases
 - configure settings
 - GO!
+
+## Bonus: locally hosted parcel repo
+
+Install & start httpd:
+```
+sudo yum install -y httpd
+sudo systemctl start httpd
+```
+
+Download parcels into a temporary directory:
+```
+mkdir parcelrepo
+cd parcelrepo/
+wget https://archive.cloudera.com/cdh5/parcels/5.8.3/CDH-5.8.3-1.cdh5.8.3.p0.2-el7.parcel
+wget https://archive.cloudera.com/cdh5/parcels/5.8.3/CDH-5.8.3-1.cdh5.8.3.p0.2-el7.parcel.sha1
+wget https://archive.cloudera.com/cdh5/parcels/5.8.3/manifest.json
+```
+
+Create directory for serving parcels, copy stuff, set permissions: 
+```
+sudo mkdir -p /var/www/html/cdh5.8.3
+sudo cp * /var/www/html/cdh5.8.3/
+sudo chmod -R ugo+rX /var/www/html/cdh5.8.3/
+```
+
+Check that the server is working:
+```
+curl localhost:80/cdh5.8.3/
+```
+
+Add `http://localhost:80/cdh5.8.3/` to the parcel repository URLs.
+
