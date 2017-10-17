@@ -362,5 +362,5 @@ Download & install MySQL JDBC connector:
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.tar.gz
 tar -xzvf mysql-connector-java-5.1.44.tar.gz
 sudo mkdir -p /usr/share/java/
-sudo cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/java/
+sudo cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/java/mysql-connector-java.jar
 ```
