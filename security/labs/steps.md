@@ -94,6 +94,11 @@ sudo env "JAVA_HOME=$JAVA_HOME" "PATH=$PATH" keytool -importcert -alias NicoloBi
 
 ## Copy the trust store to all cluster hosts
 
+Copy the trust store to a reachable location:
+```
+sudo env "JAVA_HOME=$JAVA_HOME" cp $JAVA_HOME/jre/lib/security/jssecacerts ~/securitylabs/jssecacerts
+```
+
 Download to your machine: `scp -i ~/Documents/Lavoro/SEBC/sebc.pem centos@sebcmaster:~/securitylabs/jssecacerts .`
 
 Write IPs of the machines to "ips", then run this snippet:
@@ -248,4 +253,4 @@ This allows you to use the same /etc/cloudera-scm-agent/config.ini file on all a
 ## Enabling TLS/SSL
 
 Follow the steps from https://www.cloudera.com/documentation/enterprise/5-9-x/topics/how_to_configure_cm_tls.html#xd_583c10bfdbd326ba-7dae4aa6-147c30d0933--7a61
-onwards
+up to https://www.cloudera.com/documentation/enterprise/5-9-x/topics/how_to_configure_cm_tls.html#topic_3
