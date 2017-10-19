@@ -434,7 +434,7 @@ CREATE DATABASE metastore DEFAULT CHARACTER SET utf8;
 GRANT ALL ON metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive_password';
 
 CREATE DATABASE sentry DEFAULT CHARACTER SET utf8;
-GRANT ALL ON senty.* TO 'sentry'@'%' IDENTIFIED BY 'sentry_password';
+GRANT ALL ON sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry_password';
 
 CREATE DATABASE nav DEFAULT CHARACTER SET utf8;
 GRANT ALL ON nav.* TO 'nav'@'%' IDENTIFIED BY 'nav_password';
