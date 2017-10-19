@@ -254,3 +254,58 @@ This allows you to use the same /etc/cloudera-scm-agent/config.ini file on all a
 
 Follow the steps from https://www.cloudera.com/documentation/enterprise/5-9-x/topics/how_to_configure_cm_tls.html#xd_583c10bfdbd326ba-7dae4aa6-147c30d0933--7a61
 up to https://www.cloudera.com/documentation/enterprise/5-9-x/topics/how_to_configure_cm_tls.html#topic_3
+
+# Kerberizing the cluster
+
+## Installing MIT KDC 
+
+## Install (server)
+
+```
+sudo yum install krb5-server krb5-workstation
+```
+
+## Configure (server)
+
+See krb5.conf.md, kdc.conf.md, kadm5.acl.md
+
+## Init (server)
+
+Create db:
+```
+sudo kdb5_util create -s
+```
+Set password to "password".
+
+Setup principals:
+```
+sudo kadmin.local
+```
+
+In the shell, execute:
+```
+addprinc nicolobidotti/admin
+addprinc nicolobidotti
+addprinc cloudera-scm/admin
+exit
+```
+
+Use password "cloudera" for both principals.
+
+## Configure (hosts)
+
+Copy /etc/krb5.conf form the server to all hosts.
+
+## Start
+
+Start & enable services:
+```
+sudo systemctl start krb5kdc
+sudo systemctl start kadmin
+sudo systemctl enable krb5kdc
+sudo systemctl enable kadmin
+```
+
+## Kerberize
+
+Use the wizard in CM.
