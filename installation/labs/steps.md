@@ -102,9 +102,7 @@ Leave a little text file telling confused sysadmins why their `sudo chmod` won't
 sudo bash -c 'echo "These are root-owned, read-only mount dirs. They have the immutable flag set, so even root cannot simply \"chmod 777\" or \"rm -rf\" them. Use \"chattr -i\" to remove the immutable flag." > /mnt/README'
 ```
 
-
 Mount with noatime
-
 ```
 sudo mount -t ext4 -o noatime /dev/xvdb /mnt/ssd0
 sudo mount -t ext4 -o noatime /dev/xvdc /mnt/ssd1
@@ -140,7 +138,7 @@ Disable THP at boot by adding to /etc/rc.d/rc.local:
 ```
 sudo bash -c 'echo "echo never > /sys/kernel/mm/transparent_hugepage/enabled" >> /etc/rc.d/rc.local'
 sudo bash -c 'echo "echo never > /sys/kernel/mm/transparent_hugepage/defrag" >> /etc/rc.d/rc.local'
-chmod +x /etc/rc.d/rc.local
+sudo chmod +x /etc/rc.d/rc.local
 ```
 
 Disable THP at boot by modifying GRUB conf:
