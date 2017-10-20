@@ -89,6 +89,39 @@ INFO  : OK
 4 rows selected (0.671 seconds)
 ```
 
+Fix wrong permissions for role fce2:
+```
+0: jdbc:hive2://localhost:10000/default> REVOKE ALL ON DATABASE default FROM ROLE fce2;
+INFO  : Compiling command(queryId=hive_20171020102424_ff403f44-5218-4161-8192-ed4433fddc98): REVOKE ALL ON DATABASE default FROM ROLE fce2
+INFO  : Semantic Analysis Completed
+INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20171020102424_ff403f44-5218-4161-8192-ed4433fddc98); Time taken: 0.054 seconds
+INFO  : Executing command(queryId=hive_20171020102424_ff403f44-5218-4161-8192-ed4433fddc98): REVOKE ALL ON DATABASE default FROM ROLE fce2
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20171020102424_ff403f44-5218-4161-8192-ed4433fddc98); Time taken: 0.092 seconds
+INFO  : OK
+No rows affected (0.156 seconds)
+0: jdbc:hive2://localhost:10000/default> GRANT SELECT ON TABLE default.sample_07 TO ROLE fce2;
+INFO  : Compiling command(queryId=hive_20171020102323_7925e0c2-41eb-4620-b878-901cded4c821): GRANT SELECT ON TABLE default.sample_07 TO ROLE fce2
+INFO  : Semantic Analysis Completed
+INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20171020102323_7925e0c2-41eb-4620-b878-901cded4c821); Time taken: 0.078 seconds
+INFO  : Executing command(queryId=hive_20171020102323_7925e0c2-41eb-4620-b878-901cded4c821): GRANT SELECT ON TABLE default.sample_07 TO ROLE fce2
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20171020102323_7925e0c2-41eb-4620-b878-901cded4c821); Time taken: 0.054 seconds
+INFO  : OK
+No rows affected (0.199 seconds)
+0: jdbc:hive2://localhost:10000/default> GRANT SELECT ON TABLE default.sample_08 TO ROLE fce2;
+INFO  : Compiling command(queryId=hive_20171020102323_55b567bc-55b8-4478-8f0b-6edccb5b75ef): GRANT SELECT ON TABLE default.sample_08 TO ROLE fce2
+INFO  : Semantic Analysis Completed
+INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
+INFO  : Completed compiling command(queryId=hive_20171020102323_55b567bc-55b8-4478-8f0b-6edccb5b75ef); Time taken: 0.051 seconds
+INFO  : Executing command(queryId=hive_20171020102323_55b567bc-55b8-4478-8f0b-6edccb5b75ef): GRANT SELECT ON TABLE default.sample_08 TO ROLE fce2
+INFO  : Starting task [Stage-0:DDL] in serial mode
+INFO  : Completed executing command(queryId=hive_20171020102323_55b567bc-55b8-4478-8f0b-6edccb5b75ef); Time taken: 0.031 seconds
+INFO  : OK
+No rows affected (0.094 seconds)
+```
 Show tables as siwicki:
 ```
 
