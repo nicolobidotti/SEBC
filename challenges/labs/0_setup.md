@@ -1,5 +1,15 @@
 Cloud provider: AWS you are using (AWS, GCE, Azure, other)
 
+Nodes:
+```
+alias                public dns
+challengemaster      ec2-54-93-243-167.eu-central-1.compute.amazonaws.com
+challengeworker1     ec2-18-194-44-111.eu-central-1.compute.amazonaws.com
+challengeworker2     ec2-18-194-44-120.eu-central-1.compute.amazonaws.com
+challengeworker3     ec2-52-59-216-55.eu-central-1.compute.amazonaws.com
+challengeworker4     ec2-52-59-233-5.eu-central-1.compute.amazonaws.com
+```
+
 Linux release: CentOS 7.2.1511 (ami-9bf712f4)
 
 Disk space on each node:
