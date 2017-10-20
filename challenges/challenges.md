@@ -6,7 +6,7 @@
 ---
 <div style="page-break-after: always;"></div>
 
-# <center> Challenges - February 17, 2017 - Singapore, Singapore
+# <center> Challenges - October 20, 2017 - Frankfurt, Germany
 
 * Overview
     * Build a CM-managed CDH cluster and secure it
@@ -28,7 +28,7 @@
 ## <center> Challenge Setup
 
 * Create the Issue `Challenges Setup`
-* Make you have both `mfernest` and `manojsundaram` as Collaborators
+* Make you have both `mfernest`, `rsiwicki` as Collaborators
 * Assign the Issue to yourself and label it `started`
 * In the file `challenges/labs/0_setup.md`:
     * List the cloud provider you are using (AWS, GCE, Azure, other)
@@ -36,12 +36,12 @@
     * Show that the disk space on each node is at least 30 GB
     * List the command and output for `yum repolist enabled` 
 * Add the following Linux accounts to all nodes
-    * User `raffles` with a UID of `2000`
-    * User `fullerton` with a UID of `3000`
-    * Create the group `hotels` and add `fullerton` to it
-    * Create the group `shops` and add `raffles` to it
-* List the `/etc/passwd` entries for `raffles` and `fullerton` in your setup file
-* List the `/etc/group` entries for `hotels` and `shops` in your setup file
+    * User `ernest` with a UID of `2000`
+    * User `siwicki` with a UID of `3000`
+    * Create the group `usa` and add `ernest` to it
+    * Create the group `emea` and add `siwicki` to it
+* List the `/etc/passwd` entries for `ernest` and `siwicki` in your setup file
+* List the `/etc/group` entries for `usa` and `emea` in your setup file
 * Push to your GitHub repo
 * Label your Issue `submitted` 
 * Assign the Issue to both instructors
@@ -79,9 +79,10 @@
 ## <center> Challenge 2: Install Cloudera Manager
 
 * Create the Issue `Install CM`
+* Install a supported version of Java 8 on all machines
 * Assign yourself to the Issue and label it `started`
 * Install Cloudera Manager on a different node from MySQL
-* Configure the CM repo to install the latest release
+* Configure the CM repo to install the 5.9 release
   * List the command and output of `ls /etc/yum.repos.d` in `challenges/labs/2_cm.md`
   * Copy the `cloudera-manager.repo` file to `challenges/labs/2_cloudera-manager.repo.md`
 * Configure Cloudera Manager
@@ -101,9 +102,9 @@
 
 * Create the Issue `Install CDH`
 * Assign the issue to yourself and label it `started`
-* Install the latest CDH release; deploy Coreset services only
+* Install the CDH 5.9 release; deploy coreset services only
   * Rename your cluster after your GitHub handle
-* Create user directories in HDFS for `raffles` and `fullerton`
+* Create user directories in HDFS for `ernest` and `siwicki`
 * Add the following to `3_cm.md`:
     * Command and output for `hdfs dfs -ls /user`
     * The output from the CM API call `../api/v14/hosts` 
@@ -111,6 +112,7 @@
     * Capture the Hue home page to `challenges/labs/3_hue_installed.png`
 * Push this work to your GitHub repo and label the Issue `submitted`
 * Assign the issue to both instructors
+* Capture output of java -version and add it to `3_jv.md`
 
 ---
 <div style="page-break-after: always;"></div>
@@ -119,14 +121,14 @@
 
 * Create the Issue `Test HDFS`
 * Assign the issue to yourself and label it `started`
-* As user `raffles`, use `teragen` to generate a 51,200,000-record dataset into six files
+* As user `ernest`, use `teragen` to generate a 51,200,000-record dataset into six files
     * Set the block size to 32 MB
     * Name the target directory `tgen512m`
     * Use the `time` command to capture job duration
 * Put the following in the file `challenges/labs/4_teragen.md`
     * The full `teragen` command 
     * The output of the `time` command
-    * The command and output of `hdfs dfs -ls /user/raffles/tgen512m`
+    * The command and output of `hdfs dfs -ls /user/ernest/tgen512m`
     * Show how many blocks are associated with this directory
 * Push this work to your GitHub repo and label the Issue `submitted`
 * Assign the issue to both instructors
@@ -140,14 +142,14 @@
 * Assign the issue to yourself and label it `started`
 * Install an MIT KDC on the same node as the MySQL server
   * Name your realm after your GitHub handle
-  * Use `SG` as a suffix
-  * For example: `MFERNEST.SG`
-* Create Kerberos principals for `raffles`, `fullerton`, and `cloudera-scm`
+  * Use `CO.UK` as a suffix
+  * For example: `ERNEST.CO.UK`
+* Create Kerberos principals for `ernest`, `siwicki`, and `cloudera-scm`
   * Give `cloudera-scm` the privileges needed to create principals and keytabs
 * Enable Kerberos for the cluster
-* Run the `terasort` program as `raffles` using `/user/raffles/tgen512m`
+* Run the `terasort` program as `ernest` using `/user/ernest/tgen512m`
   * Copy the command and output to `challenges/labs/5_terasort.md`
-* Run the Hadoop `pi` program as the user `fullerton`
+* Run the Hadoop `pi` program as the user `siwicki`
   * Copy the command and output to `challenges/labs/5_pi.md`
 *  Copy only text files in `/var/kerberos/krb5kdc/` to your repo as follows:
     * Add the prefix `5_` and the suffix `.md` 
@@ -162,15 +164,15 @@
 
 * Create the Issue `Configure Sentry`
 * Install and configure Sentry
-* Add `raffles` as a Sentry administrator
+* Add `ernest` as a Sentry administrator
 * Login to `beeline`
-  * Create an `retail` role that has rights to the `default` database
-    * Map the `shops` group to this role
-  * Create a `hospitality` role that has `SELECT` privileges only to the sample tables in `default`
-    * Map the `hotels` group to this role
-* Login to `beeline` with the principal for `fullerton`
+  * Create an `fce1` role that has all rights to the `default` database
+    * Map the `usa` group to this role
+  * Create a `fce2` role that has `SELECT` privileges only to the sample tables in `default`
+    * Map the `emea` group to this role
+* Login to `beeline` with the principal for `ernest`
   * List the result of `SHOW TABLES;` in `challenges/labs/6_results.md`
-* Login again to `beeline` as the principal for `raffles`
+* Login again to `beeline` as the principal for `siwicki`
   * List the result of `SHOW TABLES;` in the same file
 * Push this work to your GitHub repo and label the Issue `submitted`
 * Assign the issue to both instructors
@@ -184,6 +186,7 @@
 * Commit any remaining changes in your repo and push them to GitHub
 * Indicate in a follow-up email that you have stopped pushing to your repo
   * You may continue working, if you like, after confirmation of receiving this note
+  * Please include your full name, company and github handle in the email
 * Please fill out [this survey form](https://goo.gl/forms/pmHeHx03zRu3cnlc2)
 * Take it easy! You've worked very hard all week. Safe travels!
 
